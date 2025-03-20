@@ -1,20 +1,17 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from __init__ import create_app
-from models import db
-from routes import routes
+from app.__init__ import create_app  # Importuojame funkciją aplikacijos sukūrimui
+from app.models import db  # Importuojame SQLAlchemy objektą
+from app.routes import routes  # Importuojame Blueprint maršrutus
 
+# Sukuriame Flask aplikaciją
 app = create_app()
 
-# Inicializuojame duomenų bazę su aplikacija
-db.init_app(app)
-
-# Užregistruojame maršrutus
+# Užregistruojame Blueprint maršrutus
 app.register_blueprint(routes)
 
-# Sukuriame duomenų bazę (jei ji dar neegzistuoja)
+# Užtikriname, kad duomenų bazės lentelės yra sukurtos
 with app.app_context():
-    db.create_all()
+    db.create_all()  # Sukuria lenteles, jei jų nėra
 
+# Paleidžiame serverį
 if __name__ == '__main__':
     app.run(debug=True)
